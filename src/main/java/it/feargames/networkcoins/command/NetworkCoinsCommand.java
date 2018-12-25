@@ -68,14 +68,14 @@ public class NetworkCoinsCommand extends AbstractCommandExecutor {
             if (arguments[0].equalsIgnoreCase("reset")) {
                 Player target = Bukkit.getPlayerExact(arguments[1]);
                 if (target != null) {
-                    coinManager.setBalance(target.getUniqueId(), configuration.getProperty(ConfigValues.STARTING_BALANCE));
+                    coinManager.reset(target.getUniqueId());
                     sendMessage(sender, ConfigValues.LOCALE_RESET_COINS_SENDER, message ->
                             message.replace("%target", target.getName()));
                     sendMessage(target, ConfigValues.LOCALE_RESET_COINS_TARGET, message -> message);
                     return true;
                 }
                 OfflinePlayer offlineTarget = Bukkit.getOfflinePlayer(arguments[1]);
-                coinManager.setBalance(offlineTarget.getUniqueId(), configuration.getProperty(ConfigValues.STARTING_BALANCE));
+                coinManager.reset(offlineTarget.getUniqueId());
                 sendMessage(sender, ConfigValues.LOCALE_RESET_COINS_SENDER, message ->
                         message.replace("%target", offlineTarget.getName()));
                 return true;
