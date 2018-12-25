@@ -39,20 +39,12 @@ public class CoinManager {
             throw new IllegalArgumentException("New balance can't be negative!");
         }
         try (Connection connection = dataSource.getConnection()) {
-            if (balance == 0) {
-                final String query = "DELETE FROM NetworkCoins WHERE player_uuid = ?;";
-                try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    statement.setString(1, uniqueId.toString());
-                    statement.executeUpdate();
-                }
-            } else {
-                final String query = "INSERT INTO NetworkCoins (player_uuid, balance) VALUES (?, ?) "
-                        + "ON DUPLICATE KEY UPDATE balance=VALUES(balance);";
-                try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    statement.setString(1, uniqueId.toString());
-                    statement.setInt(2, balance);
-                    statement.executeUpdate();
-                }
+            final String query = "INSERT INTO NetworkCoins (player_uuid, balance) VALUES (?, ?) "
+                    + "ON DUPLICATE KEY UPDATE balance=VALUES(balance);";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, uniqueId.toString());
+                statement.setInt(2, balance);
+                statement.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to fetch the balance of player " + uniqueId + "!");
